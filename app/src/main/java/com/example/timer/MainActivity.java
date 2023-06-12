@@ -26,6 +26,8 @@ import android.widget.CheckBox; //Timer
 import android.widget.TextView; //Timer
 import android.app.Activity; //Timer
 
+import android.widget.NumberPicker; //NumberPicker
+
 public class MainActivity extends AppCompatActivity {
     private NotificationManager notificationManager; //TestNotification
     private static final int NOTIFY_ID = 1; //TestNotification
@@ -33,14 +35,30 @@ public class MainActivity extends AppCompatActivity {
 // ОБъявляем используемые объекты:
     CheckBox mCheck;
     Button mStart, mStop;
-    TextView mCount;
+    TextView mCount, textView2, textView3;
     Timer timer;
     TimerTask mTimerTask;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        NumberPicker numberPicker = findViewById(R.id.numberPicker);//NumberPicker
+        //NumberPicker numberPicker = findViewById(R.id.numberPicker);
+        numberPicker.setMaxValue(23);//NumberPicker
+        numberPicker.setMinValue(0);//NumberPicker
+        NumberPicker numberPicker2 = findViewById(R.id.numberPicker2);//NumberPicker
+        numberPicker2.setMaxValue(59);//NumberPicker
+        numberPicker2.setMinValue(0);//NumberPicker
+        TextView mtextView2 = findViewById(R.id.textView2);//NumberPicker
+        TextView mtextView3 = findViewById(R.id.textView3);//NumberPicker
+
+
+       // numberPicker.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS // блокируем появление клавиатуры
 
 // Связываемся с элементами пользовательского интерфейса:
         mCheck = (CheckBox)findViewById(R.id.single_shot);
@@ -48,6 +66,24 @@ public class MainActivity extends AppCompatActivity {
         mStop = (Button)findViewById(R.id.stop);
         mCount = (TextView)findViewById(R.id.count);
         notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE); //TestNotification
+//NumberPicker
+        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                mtextView2.setText(String.valueOf(newVal));
+            }
+        });
+        numberPicker2.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                mtextView3.setText(String.valueOf(newVal));
+            }
+        });
+//NumberPicker
+
+
+
+
 // Настраиваем слушателя нажатий по кнопке "Старт":
         mStart.setOnClickListener(new OnClickListener(){
             @Override
@@ -59,21 +95,6 @@ public class MainActivity extends AppCompatActivity {
 // выполняем задачу MyTimerTask, описание которой будет ниже:
                 timer = new Timer();
                 mTimerTask = new MyTimerTask();
-            /*    Intent intent = new Intent(getApplicationContext(), MainActivity.class); //*TestNotification
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                PendingIntent pendingIntent =
-                        PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                NotificationCompat.Builder notificationBuilder =
-                        new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-                                .setAutoCancel(false)
-                                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                                .setWhen(System.currentTimeMillis())
-                                .setContentIntent(pendingIntent)
-                                .setContentTitle("text1")
-                                .setContentText("text1")
-                                .setPriority(PRIORITY_HIGH);
-                createChannelIfNeeded(notificationManager);
-                notificationManager.notify(NOTIFY_ID, notificationBuilder.build()); //*///TestNotification
 
                 if(mCheck.isChecked()){
 
