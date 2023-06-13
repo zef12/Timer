@@ -78,18 +78,17 @@ public class MainActivity extends AppCompatActivity {
                 String text = mtextView.getText().toString();
                 String text1 = mtextView2.getText().toString();
                 String text2 = mtextView3.getText().toString();
+
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                SharedPreferences.Editor editor1 = sharedPreferences.edit();
-                SharedPreferences.Editor editor2 = sharedPreferences.edit();
-                editor.putString(TEXT, text);
-                editor1.putString(TEXT1, text1);
-                editor2.putString(TEXT2, text2);
-                editor.apply();
-                editor1.apply();
-                editor2.apply();
-                Toast.makeText(MainActivity.this, "Настройки сохранены", Toast.LENGTH_SHORT).show();
+                editor.putString(TEXT, text)
+                        .putString(TEXT1, text1)
+                        .putString(TEXT2, text2)
+                        .apply();
+
+                String toastMessage = "Настройки сохранены";
+                Toast.makeText(MainActivity.this, toastMessage, Toast.LENGTH_SHORT).show();
             }
-        });
+          });
 
 
         //SharedPreferences
