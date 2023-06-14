@@ -23,6 +23,7 @@ import android.view.View; //Timer //SharedPreferences
 import android.view.View.OnClickListener; //Timer
 import android.widget.Button; //Timer
 import android.widget.CheckBox; //Timer
+import android.widget.EditText; //Timer
 import android.widget.TextView; //Timer //SharedPreferences
 /*import android.app.Activity; //Timer
 
@@ -141,7 +142,8 @@ public class MainActivity extends AppCompatActivity {
 // выполняем задачу MyTimerTask, описание которой будет ниже:
                 timer = new Timer();
                 mTimerTask = new MyTimerTask();
-
+                int number1 = Integer.parseInt(mtextView2.getText().toString()); //number часы из т
+                int number2 = Integer.parseInt(mtextView3.getText().toString()); //number минуты
                 if(mCheck.isChecked()){
 
 // Выполняем действие с задержкой 1 секунда:
@@ -152,7 +154,8 @@ public class MainActivity extends AppCompatActivity {
 
                 }else{
 // После задержки одна секунда, повторяем действие таймера каждую секунду:
-                    timer.schedule(mTimerTask, 5000, 5000);
+                 //   timer.schedule(mTimerTask, 1000, 1000);
+                    timer.schedule(mTimerTask, 1000, (number1*3600+number2*60)*1000); //number
                 }
             }
         });
@@ -184,7 +187,8 @@ public class MainActivity extends AppCompatActivity {
 // Берем дату и время с системного календаря:
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss a");
-
+            EditText editText = findViewById(R.id.editTextTextMultiLine);
+            String text = editText.getText().toString();
 // Преобразуем информацию в строковые данные:
             final String strDate = simpleDateFormat.format(calendar.getTime());
             runOnUiThread(new Runnable(){
@@ -192,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     mCount.setText(strDate);
+                   // mCount.setText(editText);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class); //*TestNotification
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     PendingIntent pendingIntent =
@@ -203,7 +208,8 @@ public class MainActivity extends AppCompatActivity {
                                     .setWhen(System.currentTimeMillis())
                                     .setContentIntent(pendingIntent)
                                     .setContentTitle(strDate)
-                                    .setContentText(strDate)
+                    //                .setContentText(strDate)
+                                    .setContentText(text)
                                     .setPriority(PRIORITY_HIGH);
                     createChannelIfNeeded(notificationManager);
                     notificationManager.notify(NOTIFY_ID, notificationBuilder.build()); //*//TestNotification
