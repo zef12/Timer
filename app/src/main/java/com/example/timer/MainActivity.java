@@ -19,6 +19,7 @@ import java.util.Timer; //Timer
 import java.util.TimerTask; //Timer
 
 import android.os.Bundle; //Timer
+import android.util.Log;
 import android.view.View; //Timer //SharedPreferences
 import android.view.View.OnClickListener; //Timer
 import android.widget.Button; //Timer
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String CHANNEL_ID = "CHANNEL_ID"; //TestNotification
 // ОБъявляем используемые объекты:
     CheckBox mCheck;
-    Button mStart, mStop;
+    Button mStart, mStop, btn_scr_txt;
     TextView mCount;
     Timer timer;
     TimerTask mTimerTask;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        startService(new Intent(this, BackgroundService.class));
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         TextView mtextView = findViewById(R.id.editTextTextMultiLine);//NumberPicker
@@ -112,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         mStart = (Button)findViewById(R.id.start);
         mStop = (Button)findViewById(R.id.stop);
         mCount = (TextView)findViewById(R.id.count);
+        btn_scr_txt = (Button)findViewById(R.id.btn_screen_txt);
         notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE); //TestNotification
 //NumberPicker
         numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
@@ -129,6 +133,18 @@ public class MainActivity extends AppCompatActivity {
 //NumberPicker
 
 
+      //  btn_scr_txt.setOnClickListener(new OnClick_Scr_txt(){
+        //Button btn_scr_txt = (Button) findViewById(R.id.btn_screen_txt);
+        btn_scr_txt = (Button) findViewById(R.id.btn_screen_txt);
+        btn_scr_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String toastMessage = "переходим на другую страницу";
+                Toast.makeText(MainActivity.this, toastMessage, Toast.LENGTH_SHORT).show();
+                setContentView(R.layout.txt_resource);
+
+            }
+        });
 
 
 // Настраиваем слушателя нажатий по кнопке "Старт":
@@ -156,15 +172,21 @@ public class MainActivity extends AppCompatActivity {
 // После задержки одна секунда, повторяем действие таймера каждую секунду:
                  //   timer.schedule(mTimerTask, 1000, 1000);
                     timer.schedule(mTimerTask, 1000, (number1*3600+number2*60)*1000); //number
+                  //  startService(new Intent(this, BackgroundService.class));
                 }
             }
         });
 
-// Кнопка "Остановить" отменяет действие таймера:
+      //  Intent intent = new Intent(this, MyService.class);
+        // Кнопка "Остановить" отменяет действие таймера:
         mStop.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View v) {
-                if (timer!=null){timer.cancel();timer = null;
+                if (timer!=null){
+                    timer.cancel();
+                    timer = null;
+                    //stopService(intent);
+
                 }
             }
         });
@@ -176,6 +198,8 @@ public class MainActivity extends AppCompatActivity {
             manager.createNotificationChannel(notificationChannel);
         }
     } // *//TestNotification
+
+
 
 // Метод для описания того, что будет происходить при работе таймера (задача для таймера):
     class MyTimerTask extends TimerTask {
